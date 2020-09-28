@@ -1,0 +1,186 @@
+---
+title: "Introducción al lenguaje R"
+author: "Grado Ciencia de Datos"
+subtitle: Primera Sesion.
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Generación de Guión de Ejercicios 
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (todavía sin completar) de la primera sesión de Introducción al Lenguaje R. 
+
+```{r}
+
+```
+
+# R Como Calculadora
+
+## Determina el valor resultante de las siguientes operaciones
+
+Puedes consultar la ayuda de las funciones aritméticas `?Arithmetic` y trigonométicas `?Trig`
+
+* (1+(2-3)*5)/4
+* La exponencial de 0
+* Calcula el coseno del doble de $\pi$
+* El seno de un cuarto de $\pi$ 
+* El valor de la raiz cuadrada de 2 partido por 2 
+* Resta los dos últimos valores calculados ¿qué observas?
+
+```{r}
+(1+(2-3)*5)/4
+exp(0)
+cos(2*pi)
+sin(pi/4)
+sqrt(2)/2
+sin(pi/4) - sqrt(2)/2
+
+```
+
+## Interpreta el resultado de las siguientes operaciones
+
+* log(0)
+* 0/0
+* cos(0)/sin(0)
+
+```{r}
+log(0) #En el limite de log(0) da -Infinito
+0/0 #Esto no da un número
+cos(0)/sin(0) #El limite este da Infinito ya que el seno de 0 da 0
+
+```
+
+
+## Determina el valor resultante de las siguientes expresiones
+
+Necesitarás compilar el documento para visualizar las expresiones escritas en lenguaje ${\displaystyle \mathbf {L\!\!^{{}_{\scriptstyle A}}\!\!\!\!\!\;\;T\!_{\displaystyle E}\!X} }$
+
+* $2^{2*8}$
+* $e^{-\infty}$
+* $\frac{3}{2}$
+* $\frac{1}{1+\infty}$
+* $\left({1+\displaystyle\frac{1}{10^5}}\right)^{10^5}$
+
+```{r}
+2^(2*8)
+exp(1)^-Inf
+3/2
+1/(1+Inf)
+(1+1/10^5)^10^5
+```
+
+## Realiza las siguientes operaciones lógicas
+
+Puedes consultar la ayuda de los operadores relacionales `?Comparison`
+
+* Es 3 menor o igual que 7
+* El $cos(\pi)$ es diferente del seno de $sen(\pi)$
+* El $cos(\pi)$ es mayor, igual o menor que seno de $sen(\pi)$
+
+```{r}
+3<=7
+cos(pi)!=sin(pi)
+cos(pi) >= sin(pi) | cos(pi) < sin(pi)
+
+```
+
+## Operaciones Múltiples
+
+Sabiendo que se pueden generar secuencias numéricas (después los llamaremos vectores) y operar con ellas para agilizar los cálculos. Interpreta el resultado de las siguiente operaciones de secuencias. 
+
+* 1:5+1
+* 1:5+1:5
+* 1:(5*5)
+* 1:5*5
+* sum(1:5)
+* prod(1:5)
+* sum(1:5+1)
+
+```{r}
+1:5+1  #Le sumas 1 a cada elemento del vector
+1:5+1:5 #Le sumas cada elemento a cada elemento debido a que son del mismo tamaño
+1:(5*5) #Se hace primero el patentesis
+1:5*5 #Multiplicas a todos por 5
+sum(1:5) #Un sumatorio del vector
+prod(1:5) #Producto del vector
+sum(1:5+1) #Sumatorio del array +1 de cada elemento
+```
+
+Interpreta el resultado de la siguiente instrucción
+
+```{r}
+log(-1:3) #Hace un logaritmo de cada elemento del vector El primero es NaN porque no existe por lo cual no es un número y el resto da su resultado correspondiente
+```
+
+# Variables 
+
+Ejecuta las siguientes líneas de código paso a paso (CTRL+Enter). Observa como las siguientes líneas de código generan las variables A, B y C y su valor aparece en el *Workspace Global Environment*.
+
+```{r}
+A<-3
+B<-A+7
+C<-A*B
+```
+
+Utiliza la instrucción `ls` y determina la función que realiza. 
+
+```{r}
+ls() #Te devuelve una lista de las variables de tu workspace
+```
+
+Busca información de la instrucción `rm` y elimina la variable A.  ¿qué pasa si intentas eliminar dos veces la variable A?
+
+```{r}
+rm(A)
+```
+
+Combina las intrucciones `ls` y `rm` para eliminar todas las variables (y objetos) del *workspace*. Observa que la instrucción `rm` tiene un argumento denominado `list` para introduccir las variables a eliminar. 
+
+```{r}
+rm(list=ls())
+```
+
+¿Por qué el siguiente código da error pero obtenemos el valor de la variable A después de eliminarla? Comprueba lo que hacen estas líneas sobre el ``workspace``. Ejecuta las líneas de una en una.
+
+```{r}
+A<-3
+rm(a)
+print(A)
+#Porque es Case Sensitive (distingue mayusculas y minusculas)
+```
+
+# RMarkdown - imágenes
+
+## Introduce entre las líneas horizontales siguientes (las marcas ****) una imagen que te guste y su descripción. 
+
+Pasos: 
+* Obtén una imagen de Internet que desees comentar. 
+* Coloca la imagen en el directorio de trabajo para que sea accesible fácilmente accesible. 
+* Crea un título para la imágen de nivel 3, es decir con ###
+* Enlaza la imagen para que aparezca en el documento. 
+* Introduce la descripción de la imágen utilizando `Blockquotes` de Markdown
+* Añade un enlace a la página de dónde has sacado la imagen. 
+
+*******
+
+### Logo de la Universitat de Valencia
+
+[![](./logoUV.jpg)](https://www.uv.es)
+
+`El enlace esta puesto en la imagen`
+
+*******
+
+
+# Generación de Guión de Ejercicios Completos
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (¡ahora completados!) de la primera sesión de Introducción al Lenguaje R. 
+
+```{r}
+
+```

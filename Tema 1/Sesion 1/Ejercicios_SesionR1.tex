@@ -1,0 +1,322 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Introducción al lenguaje R},
+  pdfauthor={Grado Ciencia de Datos},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Introducción al lenguaje R}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Primera Sesion.}
+\author{Grado Ciencia de Datos}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{generaciuxf3n-de-guiuxf3n-de-ejercicios}{%
+\section{Generación de Guión de
+Ejercicios}\label{generaciuxf3n-de-guiuxf3n-de-ejercicios}}
+
+Compila este documento en formato HTML y genera el documento de los
+ejercicios (todavía sin completar) de la primera sesión de Introducción
+al Lenguaje R.
+
+\hypertarget{r-como-calculadora}{%
+\section{R Como Calculadora}\label{r-como-calculadora}}
+
+\hypertarget{determina-el-valor-resultante-de-las-siguientes-operaciones}{%
+\subsection{Determina el valor resultante de las siguientes
+operaciones}\label{determina-el-valor-resultante-de-las-siguientes-operaciones}}
+
+Puedes consultar la ayuda de las funciones aritméticas
+\texttt{?Arithmetic} y trigonométicas \texttt{?Trig}
+
+\begin{itemize}
+\tightlist
+\item
+  (1+(2-3)*5)/4
+\item
+  La exponencial de 0
+\item
+  Calcula el coseno del doble de \(\pi\)
+\item
+  El seno de un cuarto de \(\pi\)
+\item
+  El valor de la raiz cuadrada de 2 partido por 2
+\item
+  Resta los dos últimos valores calculados ¿qué observas?
+\end{itemize}
+
+\hypertarget{interpreta-el-resultado-de-las-siguientes-operaciones}{%
+\subsection{Interpreta el resultado de las siguientes
+operaciones}\label{interpreta-el-resultado-de-las-siguientes-operaciones}}
+
+\begin{itemize}
+\tightlist
+\item
+  log(0)
+\item
+  0/0
+\item
+  cos(0)/sin(0)
+\end{itemize}
+
+\hypertarget{determina-el-valor-resultante-de-las-siguientes-expresiones}{%
+\subsection{Determina el valor resultante de las siguientes
+expresiones}\label{determina-el-valor-resultante-de-las-siguientes-expresiones}}
+
+Necesitarás compilar el documento para visualizar las expresiones
+escritas en lenguaje
+\({\displaystyle \mathbf {L\!\!^{{}_{\scriptstyle A}}\!\!\!\!\!\;\;T\!_{\displaystyle E}\!X} }\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(2^{2*8}\)
+\item
+  \(e^{-\infty}\)
+\item
+  \(\frac{3}{2}\)
+\item
+  \(\frac{1}{1+\infty}\)
+\item
+  \(\left({1+\displaystyle\frac{1}{10^5}}\right)^{10^5}\)
+\end{itemize}
+
+\hypertarget{realiza-las-siguientes-operaciones-luxf3gicas}{%
+\subsection{Realiza las siguientes operaciones
+lógicas}\label{realiza-las-siguientes-operaciones-luxf3gicas}}
+
+Puedes consultar la ayuda de los operadores relacionales
+\texttt{?Comparison}
+
+\begin{itemize}
+\tightlist
+\item
+  Es 3 menor o igual que 7
+\item
+  El \(cos(\pi)\) es diferente del seno de \(sen(\pi)\)
+\item
+  El \(cos(\pi)\) es mayor, igual o menor que seno de \(sen(\pi)\)
+\end{itemize}
+
+\hypertarget{operaciones-muxfaltiples}{%
+\subsection{Operaciones Múltiples}\label{operaciones-muxfaltiples}}
+
+Sabiendo que se pueden generar secuencias numéricas (después los
+llamaremos vectores) y operar con ellas para agilizar los cálculos.
+Interpreta el resultado de las siguiente operaciones de secuencias.
+
+\begin{itemize}
+\tightlist
+\item
+  1:5+1
+\item
+  1:5+1:5
+\item
+  1:(5*5)
+\item
+  1:5*5
+\item
+  sum(1:5)
+\item
+  prod(1:5)
+\item
+  sum(1:5+1)
+\end{itemize}
+
+Interpreta el resultado de la siguiente instrucción
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{log}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in log(-1:3): Se han producido NaNs
+\end{verbatim}
+
+\begin{verbatim}
+## [1]       NaN      -Inf 0.0000000 0.6931472 1.0986123
+\end{verbatim}
+
+\hypertarget{variables}{%
+\section{Variables}\label{variables}}
+
+Ejecuta las siguientes líneas de código paso a paso (CTRL+Enter).
+Observa como las siguientes líneas de código generan las variables A, B
+y C y su valor aparece en el \emph{Workspace Global Environment}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A<-}\DecValTok{3}
+\NormalTok{B<-A}\OperatorTok{+}\DecValTok{7}
+\NormalTok{C<-A}\OperatorTok{*}\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+Utiliza la instrucción \texttt{ls} y determina la función que realiza.
+
+Busca información de la instrucción \texttt{rm} y elimina la variable A.
+¿qué pasa si intentas eliminar dos veces la variable A?
+
+Combina las intrucciones \texttt{ls} y \texttt{rm} para eliminar todas
+las variables (y objetos) del \emph{workspace}. Observa que la
+instrucción \texttt{rm} tiene un argumento denominado \texttt{list} para
+introduccir las variables a eliminar.
+
+¿Por qué el siguiente código da error pero obtenemos el valor de la
+variable A después de eliminarla? Comprueba lo que hacen estas líneas
+sobre el \texttt{workspace}. Ejecuta las líneas de una en una.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A<-}\DecValTok{3}
+\KeywordTok{rm}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in rm(a): objeto 'a' no encontrado
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\hypertarget{rmarkdown---imuxe1genes}{%
+\section{RMarkdown - imágenes}\label{rmarkdown---imuxe1genes}}
+
+\hypertarget{introduce-entre-las-luxedneas-horizontales-siguientes-las-marcas-una-imagen-que-te-guste-y-su-descripciuxf3n.}{%
+\subsection{Introduce entre las líneas horizontales siguientes (las
+marcas ****) una imagen que te guste y su
+descripción.}\label{introduce-entre-las-luxedneas-horizontales-siguientes-las-marcas-una-imagen-que-te-guste-y-su-descripciuxf3n.}}
+
+Pasos: * Obtén una imagen de Internet que desees comentar. * Coloca la
+imagen en el directorio de trabajo para que sea accesible fácilmente
+accesible. * Crea un título para la imágen de nivel 3, es decir con
+\#\#\# * Enlaza la imagen para que aparezca en el documento. * Introduce
+la descripción de la imágen utilizando \texttt{Blockquotes} de Markdown
+* Añade un enlace a la página de dónde has sacado la imagen.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{generaciuxf3n-de-guiuxf3n-de-ejercicios-completos}{%
+\section{Generación de Guión de Ejercicios
+Completos}\label{generaciuxf3n-de-guiuxf3n-de-ejercicios-completos}}
+
+Compila este documento en formato HTML y genera el documento de los
+ejercicios (¡ahora completados!) de la primera sesión de Introducción al
+Lenguaje R.
+
+\end{document}
