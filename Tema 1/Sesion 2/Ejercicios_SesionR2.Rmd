@@ -1,0 +1,317 @@
+---
+title: "Introducción al lenguaje R"
+author: "Grado Ciencia de Datos"
+subtitle: Segunda Sesión.
+output:
+  html_document:
+    number_sections: yes
+    theme: cerulean
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**************************************************************
+
+# Generación de Guión de Ejercicios 
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (todavía sin completar) de la sesión de Introducción al Lenguaje R. 
+
+```{r}
+#desde la barra de menu: Knit to HTML
+```
+
+**************************************************************
+
+# Common R Objects
+
+Observa el `workspace Global Environment` cada vez que ejecutas una línea del siguiente `chunk` ¿qué observas diferente en cada objeto que permite distinguirlo del resto?
+
+```{r}
+rm(list=ls()) #remove all
+v <- c(1:4) #integer vector
+m <- matrix(1:9, ncol=3) #matrix
+a <- array(1:8, dim =c(2,2,2)) #array
+f <- factor(c("S","M","L")) #factor
+l <- list(v,f) #list
+df <- data.frame(m) #data.frame
+```
+
+```{r}
+#solución:
+#v es un vector siempre va a tener una dimensión
+#m es una matriz siempre tendrá dos dimensiones
+#a es un array que puede tener todas las dimensones que quieras en este caso 3
+#f es un factor y te pone los niveles
+#l es una lista puede mezclar tipos de valores
+#df es un data frame que lo que hace es como una lista pero en dos dimensiones
+
+
+```
+
+**************************************************************
+
+# Vectors
+
+## Default value vectors
+
+```{r}
+c <- character(5)
+i <- integer(3)
+l <- logical(4)
+n <- numeric(5)
+z <- complex(3)
+```
+
+## Example vectors 
+
+```{r}
+c <- c('pink', 'blue') # character vector
+i <- c(1L,3L,1:4) #integer vector
+l <- c(TRUE, FALSE)# logical vector
+n <- c(1.3, 7, 7/20)# numeric vector
+z <- c(1+2i, 2, -3+4i) # complex vector
+```
+
+## Sequence Operators
+
+```{r}
+1:5 # produces an integer sequence
+1.4:6.4 # a numeric sequence
+seq(from=0, to=1, by=0.1) # numeric
+rep(1:4, each = 2, len = 10)  #numeric
+rep(1:4, each = 2, times = 3)  #numeric
+```
+
+Crea un vector `v` con que contenga los primeros 5 números de cada decena hasta el 100.
+
+```{r}
+#v <- c(1,2,3,4,5,11,12,13,14,15,21,...)
+#solución:
+v <- vector()
+for (i in 1:100) {
+  if(i %% 10 <= 5 & i %% 10 != 0){
+    v<-c(v,i);
+  }
+}
+print(v)
+```
+
+Utiliza la función `rep` de dos formas diferentes para generar `v`.
+```{r}
+v <- c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 
+     1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+#solución:
+v <- rep(1:5, len=25)
+print(v)
+v <- rep(1:5, times=5)
+print(v)
+```
+
+## Named vector
+
+```{r}
+v1 <- 1:3 # vector
+names(v1) <- c("a","b","c") # a named vector
+v1
+v1 <- unname(v1) # vector
+v1
+
+v2 <- c(a=1L, b=2L, c=3L) # a named vector
+v2
+
+v1==v2 #comparision
+```
+
+## Indexing
+
+```{r}
+v <- month.name #character vector
+v[1:4] #Index by positive numbers
+v[-(3:12)] #Index by negative numbers
+v[rep(c(T,F,F,F),times=3)] #Index by logical
+```
+
+Selecciona la última posición del vector `s` a partir de la intrucción `length`. ¡Cuidado porque `s` cambia de valores cada vez que se ejecuta.!
+
+```{r}
+s <- sample(10) 
+s
+#solución:
+s[length(s)]
+
+```
+
+Crea un Named vector `month.days` que almacene los días que tiene cada mes del año. Aprovecha el vector `month.name` para darle nombre a las posiciones del vector (truco de los nudillos). 
+
+```{r}
+month.days <- vector()
+for (i in 1:12) {
+  if(i==2){
+    month.days[i] <- 28;
+  }else if((i<=7 & i%%2==1) | (i>7 & i%%2==0)){
+    month.days[i] <- 31
+  }else{
+    month.days[i] <- 30
+  }
+}
+names(month.days) <- month.name
+month.days
+#solución alternativa:
+month.days <- c(rep(c(31,30),len=7),rep(c(31,30),len=5)) #truco de los nudillos
+month.days[2] <- 28
+names(month.days) <- month.name
+month.days
+```
+
+Selecciona los meses del vector `month.days` que no tienen 31 días. 
+
+```{r}
+#solución:
+print(month.name[month.days != 31])
+
+
+```
+
+## Conversion
+
+```{r}
+v1 <- c(a=1, b=2, c=3) # a named vector
+v2 <- rep(NA, 3) # 3 repeated NAs
+v3 <- c(v1, v2) # concatenate and flatten
+```
+
+**************************************************************
+
+# Matrix 
+
+## Matrix creation
+
+```{r}
+matrix() #matrix(data=NA, nrow=1, ncol=1, byrow=FALSE, dimnames=NULL)
+matrix(data=1:9, nrow=3, ncol=3, byrow=TRUE) # which yields the following 3x3 matrix
+matrix(data=1:9, nrow=3, ncol=3, byrow=FALSE)
+```
+
+## Named Matrix creation
+
+```{r}
+M <- matrix(data=1:9, nrow=3, ncol=3, byrow=F, 
+       dimnames=list(c("R1", "R2", "R3"), c("C1","C2","C3")))
+M
+names(M)
+rownames(M)
+colnames(M)
+colnames(M) <- (c("A","B","C"))
+M
+colnames(M) <- (c("C1","C2","C3"))
+```
+
+## Indexing Matrix 
+
+```{r}
+M <- matrix(data=1:9, nrow=3, ncol=3, byrow=F, 
+       dimnames=list(c("R1", "R2", "R3"), c("C1","C2","C3")))
+M[1:2,1:2] #matrix
+M[2,2] #vector
+M["R2","C2"]
+M[3,] #named vector
+M[,2] #named vector
+M[,2,drop=F] #matrix
+```
+
+## Matrix manipulation
+
+```{r warning=FALSE}
+cbind(1:3, 4:6) #horizontal join
+cbind(1, 1:3, 1:4) #vectors recycling
+rbind(c("a","b","c"),4) #vertical join, conversion + recycling
+```
+
+Crea la matriz siguiente con el menor código posible.
+
+.    [,1] [,2] [,3] [,4]   
+[1,]    1    2    3    4   
+[2,]    5    1    2    3   
+[3,]    4    5    1    2   
+[4,]    3    4    5    1   
+
+
+```{r warning=TRUE}
+#solución:
+m <- t(matrix(rep(1:5, len=16), ncol=4))
+m
+```
+
+Dada la matriz ML creada a partir del vector de caracteres LETTERS.
+* Selecciona la fila quinta y almacénala en el objeto `a` ¿es un objeto matriz?
+* Selecciona la fila quinta y la columna segunda y almacénala en el objeto `b` para que sea un objeto matriz
+
+```{r}
+ML <- matrix(data=LETTERS, nrow=13, ncol=2)
+#solución a):
+a <- ML[5,]
+a
+#No es un objeto de matriz, es un vector
+#solución b):
+b<-matrix(ML[5,2])
+b
+```
+
+Intercambia las columnas 1 y 2 de la matrix `X`. 
+
+     [,1]  [,2]
+[1,] TRUE FALSE
+[2,] TRUE FALSE
+[3,] TRUE FALSE
+[4,] TRUE FALSE
+[5,] TRUE FALSE
+
+```{r}
+#solución:
+X <- matrix(c(T,T,T,T,T,F,F,F,F,F), ncol=2) #He creado la matriz X ya que no existia
+inverse <- matrix(c (X[,2] , X[,1]), ncol=2)
+inverse
+```
+
+## Algebra
+
+Comprueba (con la comparación de matrices `==`) que el producto _matricial_ de una matriz `A` con la matriz identidad `I` 3x3 proporciona la misma matrix `A`. En cambio, el producto _elemento a elemento_ selecciona la diagonal de la matriz `A`.
+
+```{r}
+I <- diag(1,nrow=3) #identity
+A <- matrix(1:9,nrow=3)
+
+#solución a): 
+print(A==A%*%I)
+#solución b): 
+print(A!=A*I)
+```
+
+**************************************************************
+
+# Arrays
+
+```{r}
+# A three dimensional array
+array(data = 1:8, dim =c(2,2,2))
+```
+
+```{r}
+A <- array(data = 1:8, dim =c(2,2,2), 
+  dimnames = list(c("D1a","D1b"),c("D2a","D2b"),c("D3a","D3b")))
+ftable(A)
+```
+
+
+**************************************************************
+
+# Generación de Guión de Ejercicios Completos  
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (¡ahora completados!) de la sesión de Introducción al Lenguaje R.
+
+```{r}
+#desde la barra de menu: Knit to HTML
+```
