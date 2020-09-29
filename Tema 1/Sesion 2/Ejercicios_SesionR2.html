@@ -478,10 +478,10 @@ v[1:4] #Index by positive numbers</code></pre>
 <p>Selecciona la última posición del vector <code>s</code> a partir de la intrucción <code>length</code>. ¡Cuidado porque <code>s</code> cambia de valores cada vez que se ejecuta.!</p>
 <pre class="r"><code>s &lt;- sample(10) 
 s</code></pre>
-<pre><code>##  [1]  4  7  9  5  2  6  8 10  3  1</code></pre>
+<pre><code>##  [1]  2  3  8 10  4  5  7  9  1  6</code></pre>
 <pre class="r"><code>#solución:
 s[length(s)]</code></pre>
-<pre><code>## [1] 1</code></pre>
+<pre><code>## [1] 6</code></pre>
 <p>Crea un Named vector <code>month.days</code> que almacene los días que tiene cada mes del año. Aprovecha el vector <code>month.name</code> para darle nombre a las posiciones del vector (truco de los nudillos).</p>
 <pre class="r"><code>month.days &lt;- vector()
 for (i in 1:12) {
@@ -656,7 +656,9 @@ print(A==A%*%I)</code></pre>
 ## [2,] TRUE TRUE TRUE
 ## [3,] TRUE TRUE TRUE</code></pre>
 <pre class="r"><code>#solución b): 
-print(A!=A*I)</code></pre>
+print(diag(A*I))</code></pre>
+<pre><code>## [1] 1 5 9</code></pre>
+<pre class="r"><code>print(A!=A*I)</code></pre>
 <pre><code>##       [,1]  [,2]  [,3]
 ## [1,] FALSE  TRUE  TRUE
 ## [2,]  TRUE FALSE  TRUE

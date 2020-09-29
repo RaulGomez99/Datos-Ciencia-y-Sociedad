@@ -287,6 +287,7 @@ A <- matrix(1:9,nrow=3)
 #solución a): 
 print(A==A%*%I)
 #solución b): 
+print(diag(A*I))
 print(A!=A*I)
 ```
 
