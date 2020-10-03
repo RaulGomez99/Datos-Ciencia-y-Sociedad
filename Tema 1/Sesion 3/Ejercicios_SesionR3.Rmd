@@ -165,9 +165,17 @@ v<-c(40L, 35L, 69L, 74L, 38L, 58L, 13L, 27L, 17L, 68L, 21L, 80L,
 75L, 3L, 22L, 29L, 29L)
 
 #solution
-cutValues <- cut(v, 3, ordered_result = TRUE, labels = c("young","adult","older"))
-cutValues
+cutValuesStrings <- cut(v, 3, ordered_result = TRUE, labels = c("young","adult","older"))
+cutValuesStrings
 
+cutValues <- cut(v, 3)
+number <- levels(cutValues)[3]
+comaCarachter <- gregexpr(pattern =',',number)[1][[1]][1]
+
+number <- substr(number, 2, comaCarachter - 1)
+number <- as.numeric(number)
+
+v[v < number]
 ```
 
 

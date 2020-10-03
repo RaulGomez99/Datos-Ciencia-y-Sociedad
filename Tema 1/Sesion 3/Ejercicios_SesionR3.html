@@ -503,12 +503,21 @@ s</code></pre>
 75L, 3L, 22L, 29L, 29L)
 
 #solution
-cutValues &lt;- cut(v, 3, ordered_result = TRUE, labels = c(&quot;young&quot;,&quot;adult&quot;,&quot;older&quot;))
-cutValues</code></pre>
+cutValuesStrings &lt;- cut(v, 3, ordered_result = TRUE, labels = c(&quot;young&quot;,&quot;adult&quot;,&quot;older&quot;))
+cutValuesStrings</code></pre>
 <pre><code>##  [1] adult adult older older adult older young young young older young older
 ## [13] adult young adult adult older adult older young older older adult adult
 ## [25] older older young young adult adult
 ## Levels: young &lt; adult &lt; older</code></pre>
+<pre class="r"><code>cutValues &lt;- cut(v, 3)
+number &lt;- levels(cutValues)[3]
+comaCarachter &lt;- gregexpr(pattern =&#39;,&#39;,number)[1][[1]][1]
+
+number &lt;- substr(number, 2, comaCarachter - 1)
+number &lt;- as.numeric(number)
+
+v[v &lt; number]</code></pre>
+<pre><code>##  [1] 40 35 38 13 27 17 21 42 19 29 52 40 23 37 38  3 22 29 29</code></pre>
 </div>
 </div>
 <div id="plot-factors" class="section level2">
