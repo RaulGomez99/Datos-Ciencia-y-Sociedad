@@ -1,0 +1,250 @@
+---
+title: "Introduction to R language"
+subtitle: "Fourth Session"
+author: "Grado Ciencia de Datos"
+output: 
+  html_document: 
+    number_sections: no
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**************************************************************
+
+# Generación de Guión de Ejercicios 
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (todavía sin completar) de la sesión de Introducción al Lenguaje R. 
+
+```{r}
+
+```
+
+**************************************************************
+
+# DataFrame
+
+## Create Factors
+
+```{r}
+empty <- data.frame()# empty data frame
+c1 <- 1:10# vector of integers
+c2 <- letters[1:10] # vector of strings
+df <- data.frame(col1=c1,col2=c2)
+df
+```
+
+## Referencing cells [row, col] [[r, c]]
+
+* `[[` for single cell selection
+* `[` for multi selection
+
+```{r, message=FALSE, warning=FALSE}
+vec <- df[[5, 2]] # get cell by row/col num (vector or factor)
+newDF <- df[1:5, 1:2] # get multi in new df
+df[[2, 'col1']] <- 12 # set single cell
+df[3:5, c('col1', 'col2')] <- 9 # set multi, and invalid factor level, NA generated!
+```
+
+## Referencing rows [r, ]
+
+* Returns a data frame (and not a vector!)
+
+```{r, eval=FALSE}
+row.1 <- df[1, ]; 
+row.n <- df[nrow(df),]
+```
+
+* To get a row as a vector, use following
+
+```{r, echo=TRUE}
+row=8
+vrow <- as.numeric(df[row,])
+vrow <- as.character(df[row,])
+```
+
+## Referencing columns [,c] [c] [[c]] $col
+
+* Most column references return a vector
+
+```{r, eval=FALSE}
+df<-data.frame(cats=c("Bobtail","Bengal"),frogs=c("Poison","Tree"),horses=c("Appaloosa","Andalusian"))
+col.vec <- df$cats # returns a vector
+col.vec <- df[, 'horses'] # returns vector
+a<-1
+col.vec <- df[, a] # a is int or string
+col.vec <- df[['frogs']] # returns a vector
+frogs.df <- df['frogs'] # returns 1 col df
+first.df <- df[1] # returns 1 col df
+first.col <- df[, 1] # returns a vector
+last.col <- df[, ncol(df)] # returns vector
+```
+
+Crea un `data.frame` a partir de la siguiente información en forma de vectores.  
+* Determina la dimensión, número de filas y columnas.
+* Obtén el nombre de las columas 
+
+```{r}
+manager <- c( 1:5 )
+date    <- c( "10/11/08", "10/12/08", "10/13/08", "10/14/08", "10/15/08" )
+country <- c( "US", "US", "UK", "UK", "UK" )
+gender  <- c( "M", "F", "F", NA, "F" )
+age     <- c ( NA, 45, 25, 39, 99 )
+q1      <- c( 5, 3, 3, 3, 2 )
+q2      <- c( 5, 5, 5, NA, 2 )
+q3      <- c( 5, NA, 2, NA, 1 )
+
+#solucion
+df <- data.frame(manager = manager, date = date, country = country, 
+                 gender = gender, age = age, q1 = q1, q2 = q2, q3 = q3);
+paste("Número de filas es:",nrow(df));
+paste("Número de columnas es:",ncol(df));
+names(df);
+```
+
+* Selecciona las columnas _c("q1","q2","q3")_ en un nuevo data.frame `df.sel4`. Determina la clase (*?class*) de `df.sel4`.
+```{r}
+#solucion
+df.sel4 <- df[,c("q1","q2","q3")];
+df.sel4
+class(df.sel4);
+
+```
+
+* Selecciona (de dos formas distintas) el data.frame que contenga sólo la columna _gender_. Comprueba que lo que obtienes es de clase data.frame.
+```{r}
+#solucion
+forma1 <- df[4];
+forma1
+class(forma1);
+forma2 <- df["gender"];
+forma2
+class(forma2)
+
+
+```
+
+* Selecciona (de tres formas distintas) el vector que contenga sólo la columna _gender_. Comprueba que lo que obtienes es de clase vector.
+
+```{r}
+#solucion
+forma1 <- df[,"gender"];
+forma1
+class(forma1);
+forma2 <- df[,4];
+forma2
+class(forma2);
+forma3 <- df$gender;
+forma3
+class(forma3);
+
+```
+
+## Manipulación 
+
+* Transforma las columnas *country* y *gender* en factores.
+```{r}
+#solucion
+df$country <- factor(df[,"country"]);
+df$country
+class(df$country)
+df$gendet <- factor(df[,"gender"]);
+df$gender
+class(df$gender)
+```
+
+* Intercambia el orden de las columnas *country* y *gender*.
+```{r}
+#solucion
+#df <- data.frame(manager = df$manager, date = df$date, gender = df$gender,
+#                 country = df$country, age = df$age, q1 = df$q1, q2 = df$q2,
+#                 q3 = df$q3)
+df <- df[c(1,2,4,3,5:8)]
+df
+```
+
+* Ordena (*?order*)las filas ordenando la edad de menor a mayor.
+
+```{r}
+#solucion
+dfOrdered <- df[order(df$age),]
+dfOrdered
+```
+
+
+**************************************************************
+
+# Import Data
+
+## data()
+
+Existen unos conjuntos de datos en el paquete `utils` que se cargan por defecto. Usando `data()` puedes obtener su descripción. 
+
+* Observa la descipción de los famosos conjuntos `cars` y `iris`.
+* Representa cada uno de ellos ¿es necesario cargarlos?
+  * ¿Cuántas especies hay `iris`?
+  * ¿Qué ocurre cuando aumenta `speed` ?
+
+```{r}
+#solucion
+#Si no cargas los datos no lso tienes y no va
+#Iris tiene 3 especies
+#Cuanta más speed más dist
+data(cars)
+plot(cars)
+data(iris)
+plot(iris)
+```
+
+## Save and load
+
+Ejecuta línea a línea y observa el `workspace`. Comenta qué hace cada línea.
+
+```{r}
+x <- 1:10
+y <- list(a = 1, b = TRUE, c = "text")
+save(x, y, file = "xy.RData")
+rm(list=ls())
+load(file="xy.RData")
+ls()
+```
+
+Carga el fichero "PRICE.RData" y determina las observaciones y variables que contiene.
+
+```{r}
+#solucion
+load(file="PRICe.RData")
+ls()
+
+```
+
+## Import CSV file
+
+```{r}
+DF <- read.csv("./Qualitative_Bankruptcy.txt", header=FALSE)
+str(DF)
+```
+
+## Import CSV file from URL
+
+Descarga el fichero de datos `dowjones_super.csv` disponible en la dirección
+"http://www.portfolioprobe.com/R/blog/dowjones_super.csv" directamente a un `data.frame` denominado `superbowl` y determina el contenido del mismo.
+
+```{r}
+#solution
+superbowl <- read.csv("./dowjones_super.csv");
+superbowl2 <- read.csv("http://www.portfolioprobe.com/R/blog/dowjones_super.csv");
+str(superbowl)
+
+```
+**************************************************************
+
+# Generación de Guión de Ejercicios Completos  
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (¡ahora completados!) de la sesión de Introducción al Lenguaje R.
+
+```{r}
+
+```

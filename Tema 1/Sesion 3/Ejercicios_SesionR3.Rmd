@@ -225,7 +225,7 @@ Dada la lista `l` dada:
 
 ```{r}
 l <- list(x='a', y='b', z='c', t='d')
-n <- c("a","b","c")
+n <- c("odio","el","programa","r")
 
 #solucion 
 l[6] <- n
