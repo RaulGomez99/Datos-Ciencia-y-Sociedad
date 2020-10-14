@@ -235,11 +235,12 @@ Dada la lista `l` dada:
 
 ```{r}
 l <- list(x='a', y='b', z='c', t='d')
-n <- c("odio","el","programa","r")
+n <- list(c("a","b","c"))
 
 #solucion 
 l[6] <- n
-l["k"]<- "w"
+w <- list(1:5)
+l["k"]<- w
 l["w"]<-"e"
 #♠ El valor 5 lo añade como nulo
 
