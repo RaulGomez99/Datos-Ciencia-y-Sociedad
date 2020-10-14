@@ -1,0 +1,362 @@
+---
+title: "Introduction to R language"
+subtitle: "Fifth Session"
+author: "Grado Ciencia de Datos"
+output: 
+  html_document: 
+    number_sections: no
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**************************************************************
+
+# Generación de Guión de Ejercicios 
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (todavía sin completar) de la sesión de Introducción al Lenguaje R. 
+
+```{r}
+
+```
+
+**************************************************************
+# Control Structures
+
+## Flow control functions
+
+### `if-else`
+
+```r
+if(<condition>) {
+    ## do something
+} else {
+    ## do something else
+}
+```
+
+```{r}
+x<-F
+if (x==TRUE) {
+  print("X is TRUE")
+} else {
+  print("X is FALSE")
+}
+```
+
+**Ejercicio** Utiliza la versión vectorizada de if-else `ifelse(cond, expr1, expr2)` para tranformar el vector `x` en el vector `y` de tal manera que los impares se tranformen en el valor 0 y los pares se transformen en la mitad.
+
+```{r}
+x<-c(3L, 16L, 11L, 9L, 16L, 7L, 17L, 14L, 17L, 15L, 20L, 14L, 14L, 
+4L, 1L, 8L, 14L, 2L, 14L, 12L)
+ifelse(x%%2 == 0, x/2, 0)
+```
+
+### `switch`
+
+* the switch statement (not vectorised)
+* expr.string evaluates to a char string
+* cases not enclosed in quotes.
+
+```r
+switch( expr.string,
+  case1 = expr1,
+  case2 = expr2,
+  default = expr3 # default optional
+)
+```
+
+```{r}
+x<-"F"
+switch(x,
+  T = "X is TRUE",
+  F = "X is FALSE"
+)
+```
+
+## Control structure
+
+### `for`
+```r
+for(<condition>) {
+    ## do something
+}
+```
+
+```{r}
+join<-character() # empty character vector
+vector<-c("A", "B", "C", "D", "E") # character vector
+for(letter in vector) { #loop through letter in character vector
+    join<-c(letter,join)
+    print(join) 
+} 
+```
+
+**Ejercicio** Aprovechando la función `seq_along(vector)` que crea una secuencia de valores 1:length(vector) reescribe el código del ejercicio anterior.
+
+```{r}
+join<-character() # empty character vector
+vector<-c("A", "B", "C", "D", "E") # character vector
+for(letter in seq_along(vector)) { #loop through letter in character vector
+    join<-c(vector[letter],join)
+    print(join) 
+} 
+```
+### `while`
+
+```r
+while(<condition>) {
+   ## do something
+}
+```
+
+```{r}
+x<-sample.int(10,1) #random number [1-10]
+x
+while(x>0) { #while x is positive
+   x<- x-1 
+  print(x)
+}
+```
+
+**Ejercicio**  Realiza un buble con `while` para calcular la estimación de la raíz cuadrada $x$ de un número $S=150$ siguiendo la siguiente relación iterativa (método Babilónico): 
+
+$x \leftarrow \frac{1}{2}(x+\frac{S}{x})$
+
+sidendo $x=100$ (por ejemplo) la estimación inicial de $\sqrt{S}.$ Detén las iteraciones cuando el error sea inferior a 0.001 (Pista: $abs(\sqrt{S}-x)<0.001$)
+
+```{r }
+
+S<-150 #valor del que queremos calcular la raiz
+x<-100 #valor inicial estimación de la raiz
+
+x<-1/2*(x+S/x) #valor estimado con 1 iteración (falta el bucle)
+cat("Valor estimado sqrt(S):",x,"\n")
+
+
+
+```
+
+**************************************************************
+# Functions
+
+## Returning an object
+
+By default the value of the last evaluation which is returned from the function.
+
+```{r}
+f<- function() {
+  x<-1
+  z<-2 #last evaluation
+}
+output<-f()
+output #z value
+```
+
+## Argument matching
+
+Argument matching order: exact $\rightarrow$ partial $\rightarrow$ positional
+        
+```{r}
+f<-function(value) {
+  value^2 #last evaluation is returned
+}
+f(value=2) #exact matching
+f(v=2)#partial matching
+f(2)#positional matching
+```
+        
+## Lazy Evaluation
+
+R will evaluate as needed, so everything executes until an error occurs.
+
+```{r}
+f <- function (a, b) {a^2}
+f(a=5,b=NULL)
+f(5) # Lazy Evaluation
+```
+
+##Default and missing arguments
+
+Function arguments in R can have default values.
+```{r}
+f <- function(a = 1, b = 2) {
+  c(a, b)
+}
+f()
+f(3,4)
+f(7)
+f(,9)
+```
+
+## ... arguments
+
+The ... argument means that you can add other arguments which will be passed to functions inside the function.
+
+```{r}
+my.plot <- function(x,...){
+	plot(x, type = "l", ...)
+}
+x<-1:10
+my.plot(x, main = "line plot", col= "red",ylab="x values")
+```
+
+**************************************************************
+# Functions DataScience
+
+## Statistic Function
+
+### mean
+
+```{r}
+x<-seq(1,5,0.1);y<-exp(x);
+mean(y)
+plot(x,y,pch="*")
+abline(h=mean(y),col="red",lty=2)
+text(2,mean(y)+5,"mean",col="red")
+abline(h=median(y),col="blue",lty=2)
+text(2,median(y)+5,"median",col="blue")
+grid(10,10)
+```
+
+
+**Ejercicio** ¿por qué no funciona la función que calcula el valor medio? ¿qué argumento es necesario modificar?
+
+```{r}
+x<-c(10, NA, 13, 35, -12, 0, 1, 17, 9999, 19, 21, NA)
+mean(x)
+
+```
+
+
+### sd
+
+**Ejercicio** El intervalo de confianza del valor valor medio al 95% de confianza se se define:
+  $\mu\pm1.96\frac{\sigma}{\sqrt{N}}$   
+siendo $\mu$ el valor medio, $\sigma$ la desviación estandar y $N$ el número de valores. 
+```{r}
+x<-c(10, NA, 13, 35, -12, 0, 1, 17, 15, 19, 21, NA)
+
+#solution
+mean(x,na.rm=TRUE)
+mean(x,na.rm=TRUE)-1.96*sd(x,na.rm=TRUE)/sqrt(length(x[!is.na(x)]))
+mean(x,na.rm=TRUE)+1.96*sd(x,na.rm=TRUE)/sqrt(length(x[!is.na(x)]))
+```
+
+
+**Ejercicio** La función `fivenum` proporciona las 5 medidas (min, lower-hinge, median, upper-hinge, max )propuestas por uno de los padres del análsis de datos John W. Tukey. Las medidas son muy parecidas a los valores proporcionados por la función `summary`. Comprueba que cuando el número de medidas es impar, el resultado es el mismo y cuando el número de muestras de par no. 
+
+```{r}
+#ODD Set of Numbers in the sample
+x.odd<-c(33, 34, 55, 57, 60, 61, 61, 2, 3, 5, 6, 7, 8, 12, 15, 18, 20, 27, 28, 29, 70)
+#EVEN Set of Numbers in the sample (multiple of 4)
+x.even<-c(33, 34, 55, 57, 60, 61, 61, 3, 5, 6, 7, 8, 12, 15, 18, 20, 27, 28, 29, 70)
+
+
+```
+
+
+**************************************************************
+# Avoid Loops
+
+## lapply & sapply
+
+`lapply(X, FUN, ...)` returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X.
+
+`sapply(X, FUN, ...)` user-friendly version and wrapper of lapply by default returning a vector, matrix or, if simplify = "array", an array if appropriate, by applying simplify2array().
+
+```{r}
+x.list<-list(a=c(10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L), b=c(10L, 9L, 8L, 7L, 6L, 
+5L, 4L), c=c(10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L, 2L), d=c(10L, 9L, 8L, 
+7L, 6L, 5L, 4L, 3L, 2L, 1L), e=c(10L, 9L, 8L, 7L, 6L, 5L))
+str(x.list)
+r.apply<-lapply(x.list,length) #returns a list
+str(r.apply)
+s.apply<-sapply(x.list,length) #returns a named vector
+str(s.apply)
+barplot(s.apply)
+```
+
+**Ejercicio** Determina el rango intercuartil de cada elemento de la lista. Determina también el coeficiente de varianza (sd/mean) utilizando una función `cv` que lo calcule. 
+
+```{r}
+x.list<-list(a=c(10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L), b=c(10L, 9L, 8L, 7L, 6L, 
+5L, 4L), c=c(10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L, 2L), d=c(10L, 9L, 8L, 
+7L, 6L, 5L, 4L, 3L, 2L, 1L), e=c(10L, 9L, 8L, 7L, 6L, 5L))
+
+```
+
+
+## tapply 
+
+`tapply(X, INDEX, FUN = NULL, ..., simplify = TRUE)` Apply a function to each cell of a ragged array, that is to each (non-empty) group of values given by a unique combination of the levels of certain factors.
+
+```{r}
+load(file="tapplyExercise.RData") #load df 
+median(df[df$f=="X","v"]) #median of v with f=X
+median(df[df$f=="Y","v"]) #median of v with f=Y
+tapply(df$v, df$f, median) #median of v grouped by f
+```
+
+**Ejercicio** Determina el número de roturas (breaks) sufre cada tipo de lana (wool) dependiendo de la tensión aplicada (tension). Reliza un gráfico de mosaico. 
+
+```{r}
+#help(data("warpbreaks"))
+data("warpbreaks") #load data warpbreaka
+str(warpbreaks)
+
+```
+
+## apply
+
+`apply(X, MARGIN, FUN, ...)` Returns a vector or array or list of values obtained by applying a function to margins of an array or matrix.
+
+* Object: m, t, df, a (has 2+ dimensions)    
+* Returns: v, l, m (depends on input & fn)  
+* _margin=2_ indicates columns
+* _margin=1_ indicates rows 
+
+```{r}
+m<-matrix(1:10,nrow=10,ncol=3)
+m
+apply(m, 2, sum) #column.sum, margin=2 indicates columns
+apply(m, 1, sum) #row.sum, margin=1 indicates rows 
+```
+
+**Ejercicio** Determina cuántas veces aparece cade letra en cada columna.
+```r
+     [,1] [,2] [,3]
+ [1,] "A"  "F"  "B" 
+ [2,] "B"  "F"  "B" 
+ [3,] "E"  "B"  "B" 
+ [4,] "B"  "F"  "D" 
+ [5,] "C"  "E"  "C" 
+ [6,] "E"  "D"  "A" 
+ [7,] "F"  "D"  "A" 
+ [8,] "E"  "F"  "A" 
+ [9,] "E"  "A"  "D" 
+[10,] "C"  "F"  "C" 
+``` 
+
+```{r}
+
+x<-c("A", "B", "E", "B", "C", "E", "F", "E", "E", "C", "F", "F", 
+"B", "F", "E", "D", "D", "F", "A", "F", "B", "B", "B", "D", "C", 
+"A", "A", "A", "D", "C")
+m<-matrix(x,nrow=10,ncol=3)
+
+
+```
+
+
+**************************************************************
+
+# Generación de Guión de Ejercicios Completos  
+
+Compila este documento en formato HTML y genera el documento de los ejercicios (¡ahora completados!) de la sesión de Introducción al Lenguaje R.
+
+```{r}
+
+```

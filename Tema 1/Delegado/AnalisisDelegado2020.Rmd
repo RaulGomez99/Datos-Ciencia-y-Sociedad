@@ -1,0 +1,187 @@
+---
+title: "Elección Delegad@"
+subtitle: "Datos, Ciencia y Sociedad"
+author: "Grado en Ciencia de Datos. Universidad de Valencia."
+output:
+  html_document: 
+    theme: cosmo
+    toc: yes
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+_Nota: Este fichero tiene codificación UTF8. File->Reopen with Encoding..._
+
+## Objetivo
+
+Analizar los datos de la votación de delegad@ utilizando el lenguaje R. 
+
+## Crea el proyecto Delegado
+
+Crea una carpeta denominada Delegado, asegúrate que contiene el fichero EncuestaDelegado2020.csv descargado desde el aula virtual y crea el proyecto Delegado en RStudio. 
+
+## Carga datos
+
+Cuestionario Delegad@ realizado en _Teams_ con la herramienta _Polly_ y censurado para proteger la proteger la privacidad de la votación. El resultado se encuentra en el fichero EncuestaDelegado2020.csv. 
+
+_Nota: los ficheros con extensión CSV son texto separado por comas_
+
+```{r}
+#elecc <- read.csv("Elecci_n_delegad__20200927212743.csv");
+df.delegado <- read.csv("EncuestaDelegado2020.csv", header = TRUE,
+                        encoding = "UTF-8");
+```
+
+## Selección de variables
+
+Únicamente nos interesa las columnas del tiempo "Completed.On" y "Elección.delegad." que renombraremos por "Tiempo" y "Representantes". El resto de colunmnas no aportan información al estudio.
+
+```{r}
+df.delegado <- df.delegado[,c("Completed.On", "Elección.delegad.")];
+names(df.delegado) <- c("Tiempo","Representantes")
+
+```
+
+# Transformación
+
+## Tiempo
+
+Adecuamos el tiempo al formato _POSICxt_ y ordenaremos las votaciones para que los registros estén en orden temporal.
+
+_Nota: la zona horaria es "Europe/Madrid"_ 
+```{r}
+#ISO 8601
+df.delegado$Tiempo <- as.POSIXct(strptime(df.delegado$Tiempo, 
+                               format = "%Y-%m-%dT%H:%M:%S"));
+class(df.delegado$Tiempo)
+```
+
+## Votos
+
+Preparemos el conjunto para cumplir el objetivo. Convertiremos Representantes en una lista y la lista de votaciones a un vector de votos. El tipo de datos será _factor_.  
+
+```{r}
+library(stringr)
+votaciones <- str_split(df.delegado$Representantes, ",");
+votos <- factor(str_trim(unlist(votaciones)));
+
+
+``` 
+
+## CodeBook
+
+Variable | tipo | tipo R | Comentarios
+---------|------|--------|-------------
+Tiempo | Cuatitativa continua | POSIXct | instante de la votación
+Representante | Cualitativa Nominal | Factor unordered | lista de valores posibles Joan Ballester,Elena Bonache,María Cavero,Alex Llorens,Nicolás Peñuelas,Albert Ramos,Lisha Yam
+
+```{r}
+values.candidato<-c("Joan Ballester",
+                    "Elena Bonache",
+                    "María Cavero",
+                    "Alex Llorens",
+                    "Nicolás Peñuelas",
+                    "Albert Ramos",
+                    "Lisha Yam")
+```
+
+
+
+# Calidad de los datos
+
+Comprobamos si todos los votos son correctos. 
+
+```{r}
+all(votos %in% values.candidato)
+```
+¿qué ha fallado? 
+
+```{r}
+sum(is.na(votos))
+```
+
+Votaciones nulas: 
+
+```{r}
+df.delegado[is.na(df.delegado$Representantes),]
+```
+
+Eliminamos la votación Nula y el voto Nulo.
+
+```{r}
+df.delegado <- df.delegado[!is.na(df.delegado$Representantes), ]
+votaciones <- votaciones[!is.na(votaciones)]
+votos <- votos[!is.na(votos)]
+
+```
+
+# Resultados
+
+## Número de votaciones: 
+
+```{r}
+length(votaciones)
+```
+
+## Número de votos: 
+
+```{r}
+length(votos)
+```
+
+## Ganador@:
+
+```{r}
+resultado <- sort(table(votos), decreasing = TRUE)
+winner <- resultado[1]
+names(winner)
+```
+
+El delegado ha sido `r names(winner)` con `r winner` votos.
+
+## Cuentas de resultados: 
+
+```{r}
+plot(votos, ylim = c(0,23), cex.names = 0.75, las = 2)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+Votos por votación:
+
+```{r}
+barplot(table(sapply(votaciones, length)))
+length(votos)/length(votaciones)
+```
+
+# Pareja más votada
+
+```{r }
+table(votaciones)
+```
+
+
+
+# Evolución temporal
+
+Evolución de los votos en el tiempo
+
+```{r}
+
+```
+
+Evolución de los ganadores en el tiempo
+
+```{r}
+
+```
+
