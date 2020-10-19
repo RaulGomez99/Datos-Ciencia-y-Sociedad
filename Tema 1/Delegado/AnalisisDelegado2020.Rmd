@@ -166,7 +166,14 @@ length(votos)/length(votaciones)
 # Pareja más votada
 
 ```{r }
-table(votaciones)
+pareja <- factor()
+for (i in seq(votaciones)) {
+  votaciones[[i]] <- sort(votaciones[[i]])
+  if(length(votaciones[[i]]) == 2){
+    pareja <- factor(c(pareja,votaciones[[i]]))
+  }
+}
+table(pareja)
 ```
 
 

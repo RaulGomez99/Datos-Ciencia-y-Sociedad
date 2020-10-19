@@ -1,0 +1,425 @@
+---
+title: "Análisis Exploratorio"
+author: "Datos, Ciencia y Sociedad. Grado Ciencia de Datos. ETSE-UV."
+output: 
+  html_document: 
+    df_print: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Distribución de probabilidad
+
+Valores aletorios $x$ según una distribución de aleatoria normal centrada de media 0 y desviación estándar 1.
+
+```{r}
+set.seed(666)
+x<-rnorm(n=1000,mean=0,sd=1) #valores aleatorios centrados en 0 y sd=1
+```
+
+Discretizamos la variable continua por intervalos y obtenemos su frecuencia.
+
+```{r}
+x.intervalo<-cut(x,breaks = seq(from=-4,to=4,by = 0.5)) #troceamos la variable continua por intervalos
+x.freq<-table(x.intervalo) #summary(x.intervalo)
+x.freq
+barplot(table(x.intervalo),las=2)
+
+# mismo resultado con solo una instruccion
+par(mfrow=c(1,2))
+barplot(table(x.intervalo),las=2,ylim=c(0,200))
+hist(x,freq = TRUE,breaks = seq(from=-4,to=4,by = 0.5),ylim=c(0,200)) 
+```
+
+La densidad de probabilidad es la frecuencia normalizada para que el área sume 1 (area=suma de rectángulos de ancho 0.5 y alto igual a la frecuencia normalizada)
+.
+```{r}
+par(mfrow=c(1,2))
+densidad<-table(x.intervalo)/sum(table(x.intervalo))/(0.5)
+probabilidad=densidad*0.5
+sum(probabilidad)
+barplot(densidad,las=2,ylim=c(0,0.4)) #los intervalos son de 0.5 anchos
+hist(x,freq = FALSE,ylim=c(0,0.4))
+curve(dnorm(x),-4,4,col="red",add = T)
+```
+
+# Población y Muestra
+
+```{r}
+set.seed(666) #inicio de la semilla del generador aleatorio
+poblacion<-LETTERS
+poblacion
+muestra<-sample(x=poblacion,size=5,replace=TRUE)
+muestra
+```
+
+# Estadístico
+
+## Clásicos
+
+Resumen de los datos basado en el valor.
+
+```{r}
+x<-c(50,0:10,-5)
+mean(x) #valor medio, comentar! mean(x,trim = 0.1) #weighted.mean(x,w=c(0,rep(1,11),0))
+sd(x) #desviación estándar
+estadisticos.clasicos<-c(media=mean(x),sd=sd(x))
+estadisticos.clasicos
+```
+
+```{r}
+plot(x,pch=21,bg="orange")
+abline(h=mean(x),lty=2,col="blue")
+abline(h=mean(x)+sd(x),lty=2,col="red")
+abline(h=mean(x)-sd(x),lty=2,col="red")
+
+text(7,mean(x)+2,"mean(x)",col="blue")
+text(7,mean(x)+sd(x)+2,"mean(x)+sd(x)",col="red")
+text(7,mean(x)-sd(x)+2,"mean(x)-sd(x)",col="red")
+```
+
+## Robustos
+
+Resumen de los datos basado en la posición del valor (rango).
+
+```{r}
+x<-c(50,0:10,-5)
+x[rank(x)] #cada valor en su rango=valores ordenados!!
+```
+
+Cuantiles 
+
+```{r}
+quantile(x,probs = c(0,0.25,0.5,0.75,1)) 
+
+#otra manera de verlo
+percentiles<-quantile(x,probs = c(0,0.25,0.5,0.75,1)) 
+names(percentiles)<-c("minimo","Q1","Q2","Q3","máximo")
+percentiles
+```
+
+```{r}
+median(x) #mediana o percentil 50%
+estadisticos.robustos<-c(mediana=median(x),IQR=IQR(x))
+estadisticos.robustos
+```
+
+## Clásicos vs Robustos
+
+* Clásicos más conocidos y tienen mejores propiedades mátemáticas. 
+* Robústos menos dependientes de valores erróneos o extremos. 
+
+```{r}
+estadisticos.clasicos
+estadisticos.robustos
+```
+
+```{r}
+par(mfrow=c(1,2))
+plot(x,pch=21,bg="orange")
+abline(h=mean(x),lty=2,col="blue")
+abline(h=mean(x)+sd(x),lty=2,col="red")
+abline(h=mean(x)-sd(x),lty=2,col="red")
+text(7,mean(x)+2,"mean(x)",col="blue")
+text(7,mean(x)+sd(x)+2,"mean(x)+sd(x)",col="red")
+text(7,mean(x)-sd(x)+2,"mean(x)-sd(x)",col="red")
+
+plot(x,pch=21,bg="orange")
+abline(h=quantile(x,0.5) ,lty=3,col="blue")
+abline(h=quantile(x,0.75),lty=3,col="red")
+abline(h=quantile(x,0.25),lty=3,col="red")
+text(5,median(x)+2,"median(x)",col="blue")
+text(2,quantile(x,0.75)+2,"Q3",col="red")
+text(12,quantile(x,0.25)+2,"Q1",col="red")
+```
+
+# Valores anomales
+
+```{r}
+x<-c(-5,0:10,50)*2+10 #x<-c(-5,seq(0,10,by=0.0001),1e+10)*2+100
+plot(x)
+#mean(x) #valor medio
+#sd(x) #desviación estándar
+z.abs<-abs((x-mean(x))/sd(x)) #variable tipificada
+z.abs
+z.abs<3 #no outliers
+z.abs>=3 #outliers
+
+plot(x,z.abs,pch=21,bg=(z.abs>3))
+abline(h=3,col="red",lty=2)
+grid(ny=10)
+```
+
+# Coeficiente de correlación
+
+Mide la relación lineal de dos variables (acotado entre -1 y 1)
+
+```{r}
+x<-seq(-10,10,0.1)
+y<-x^3
+plot(x,y,main="Coeficiente de correlació")
+cor(x,y) #coeficiente de correlación
+abline(lm(y~x),col="red",lty=2) #representa una recta que se ajusta a los datos
+text(x=0,y=500,paste0("r=",round(cor(x,y),digits = 3)))
+#cor(x,y,method = "spearman")#=cor(rank(x),rank(y));
+```
+
+# Asociación
+
+## Variables independientes
+
+Estadístico $\chi^2$ pequeño indica independencia. 
+
+```{r}
+set.seed(666)
+
+n=500
+prob.moneda<-c(0.5,0.5)
+moneda<-sample(c("cara","cruz"),size=n,replace = T,prob=prob.moneda)
+prob.momento<-c(4,0.5)/4.5 #4 horas de clase y media hora de descanso
+momento<-sample(c("clase","descanso"),size=n,replace = T,prob=prob.momento)
+observado<-table(moneda,momento)
+observado
+#esperado.teorico<-prob.moneda%*%t(prob.momento)*n #teórica
+prob.moneda.sample<-prop.table(margin.table(observado,1)) #prob.moneda   
+prob.momento.sample<-prop.table(margin.table(observado,2)) #prob.momento  
+esperado<-prob.moneda.sample%*%t(prob.momento.sample)*n
+esperado
+#medida de asociación chi2
+chi2<-sum((observado-esperado)^2/esperado)
+chi2
+chisq.test(observado,correct = F)
+mosaicplot(t(observado),shade=T)
+```
+
+## Variables dependientes
+
+Estadístico $\chi^2$ grande indica dependencia.  
+
+```{r}
+set.seed(666)
+
+n=500
+dado<-sample.int(6,size=n,replace = T)
+impar<-dado%%2
+observado<-table(dado,impar)
+observado
+
+prob.dado.sample<-prop.table(margin.table(observado,1)) #prob.dado 
+prob.impar.sample<-prop.table(margin.table(observado,2)) #prob.impar
+esperado<-prob.dado.sample%*%t(prob.impar.sample)*n
+esperado
+#medida de asociación chi2
+chi2<-sum((observado-esperado)^2/esperado)
+chi2
+chisq.test(observado,correct = F)
+mosaicplot(t(observado),shade=T)
+```
+
+# Tranformaciónes de instancias (filas)
+
+## Balanceo de clases
+
+```{r}
+# Generación del data.frame
+set.seed(666)
+gripe<-sample(x=c("Gripe","NoGripe"), size=20, replace = TRUE, prob = c(0.1,0.9))
+genero<-sample(x=c("Mujer","Hombre"), size=20, replace = TRUE, prob = c(0.5,0.5))
+paciente<-data.frame(gripe,genero)
+
+contingencia<-table(paciente$gripe,paciente$genero)
+addmargins(contingencia)
+
+```
+
+Quitaremos registros del Genero mayoritario para igualar el peso de los registros
+
+```{r}
+#eliminar<-which(paciente$genero=="Mujer")[1:5]
+eliminar<-head(which(paciente$genero=="Mujer"),5)
+paciente.balanceado<-paciente
+paciente.balanceado<-paciente.balanceado[-eliminar,]
+
+contingencia.balanceado<-table(paciente.balanceado$gripe,paciente.balanceado$genero)
+addmargins(contingencia.balanceado)
+```
+
+## Imputación de valores perdidos
+
+```{r}
+data<-matrix(c(1.1,2.3,4.5,8.9,
+         2,3.2,9.7,NA,
+         1.5,1.2,5.6,NA,
+         2.1,3.3,9.9,4.6,
+         5.6,NA,NA,NA,
+         5.4,6.7,9.2,1.1,
+         3.4,2.2,6.6,NA),byrow = T,ncol=4)
+data<-as.data.frame(data)
+rownames(data)<-paste0("PAC",1:7)
+data
+
+#completar
+any(is.na(data)) #hay nulos?
+na.row<-apply(is.na(data),1,sum) #nulos por registro
+data[complete.cases(data),] #conjunto completo 
+
+data.clean<-data[na.row<=1,] #eliminamos el PAC con más de un nulo
+
+mean.V4<-mean(data.clean$V4,na.rm = TRUE)
+data.clean[is.na(data.clean$V4),]<-mean.V4
+#data
+data.clean
+```
+
+# Transformaciones de variables (columnas)
+
+## Codificación o _dummificar_
+
+```{r}
+set.seed(666)
+vocal<-sample(x=c("A","E","I","O","U"), size=20, replace = TRUE)
+vocal<-factor(vocal,ordered = FALSE)
+summary(vocal)
+vocal
+```
+
+Una posibilidad de codificar aprovechando que es factor
+
+```{r}
+vocal.codificada<-as.numeric(vocal)
+vocal.codificada
+```
+
+Dumificar una variable (también conocido como one-hot-encoding)
+
+```{r}
+vocal.dummy<-as.data.frame(matrix(0L,ncol=5,nrow = 20))
+names(vocal.dummy)<-c("A","E","I","O","U")
+#solucion
+vocal.dummy[,"A"]<-ifelse(vocal=="A",1L,0L)
+vocal.dummy[,"E"]<-ifelse(vocal=="E",1L,0L)
+vocal.dummy[,"I"]<-ifelse(vocal=="I",1L,0L)
+vocal.dummy[,"O"]<-ifelse(vocal=="O",1L,0L)
+vocal.dummy$U<-as.integer(vocal=="U")
+vocal.dummy
+#solucion 2
+vocal.dummy2<-as.data.frame(matrix(0L,ncol=5,nrow = 20))
+names(vocal.dummy2)<-c("A","E","I","O","U")
+for (f in 1:20) {
+  vocal.dummy2[f,vocal.codificada[f]]<-1
+}
+```
+
+## Max-min
+
+Transformaremos un valor aleatorio x en una variable de temperatura utilizando la transformación máximo-mínimo. 
+
+```{r}
+set.seed(666)
+x<-rbeta(n=1000,shape1=5,shape2=3) #valores aleatorio entre 0 y 1
+x.min=min(x)
+x.max=max(x)
+y.min=0
+y.max=27
+
+#completar
+temperatura<-(y.max-y.min)/(x.max-x.min)*(x-x.min)+y.min
+temperatura<-round(temperatura,digits = 1) #más realista
+
+par(mfrow=c(1,2))
+plot(x,ylab="valor aleatorio",xlab = "");rug(x,side=2,col="orange")
+plot(temperatura,xlab = "");rug(temperatura,side=2,col="orange")
+par(mfrow=c(1,1))
+```
+
+
+## Discretización
+
+```{r}
+set.seed(666)
+x<-rbeta(n=1000,shape1=5,shape2=3) #valores aleatorio entre 0 y 1
+x.min=0
+x.max=1
+y.min=0
+y.max=27
+temperatura<-(y.max-y.min)/(x.max-x.min)*(x-x.min)+y.min
+hist(temperatura,main="Distribución temperatura",col="grey")
+
+#completar
+temperatura.discreta<-cut(temperatura,c(-Inf,10,15,20,Inf))
+summary(temperatura.discreta)
+levels(temperatura.discreta)<-c("frío","fresquito","agradable","calorcito")
+temperatura.discreta
+plot(temperatura.discreta,main="Distribución temperatura")
+```
+
+
+# Visualización
+
+## Histrograma
+
+Representar el histograma de `Petal.width` para cada tipo de flor del Iris. 
+
+```{r}
+data(iris)
+hist(iris$Petal.Width,breaks = 10) #histograma con 10 particiones
+unique(iris$Species)
+
+#completar
+h1<-hist(iris$Petal.Width[iris$Species=="setosa"])
+h2<-hist(iris$Petal.Width[iris$Species=="versicolor"])
+h3<-hist(iris$Petal.Width[iris$Species=="virginica"],breaks = 10)
+
+plot( h1, col=rgb(0,0,1,1/4), xlim=c(0,3),main="Histogram Species Iris",xlab="Petal.Width")  
+plot( h2, col=rgb(1,0,0,1/4), xlim=c(0,3), add=TRUE)  
+plot( h3, col=rgb(0,1,0,1/4), xlim=c(0,3), add=TRUE)  
+grid(8,10)
+```
+
+## Boxplot
+
+Distribución de valores de las medidas de las flores del Iris utilizando Boxplot.  
+
+```{r}
+data(iris)
+#completar
+boxplot(iris[,c(1:4)],col=heat.colors(4,alpha=0.5),main="Boxplot Iris Dataset")
+grid(nx=0,ny=10)
+```
+
+## Scattering
+
+```{r}
+data("iris") 
+str(iris)
+palette(rainbow(3))
+plot(iris$Petal.Length,iris$Sepal.Length,
+     col=iris$Species,
+     ylab="Sepal.Length",
+     xlab="Petal.Length")
+
+plot(iris$Petal.Width,iris$Petal.Length,
+    col=iris$Species,
+    pch=as.numeric(iris$Species),
+     ylab="Petal.Width",
+     xlab="Petal.Length")
+```
+
+## Mosaico
+
+¿Són independientes el sexo y la supervivencia en el hundimiento del Titanic?
+
+```{r}
+data("Titanic")
+str(Titanic)
+mosaicplot(~Survived+Sex, data = Titanic)
+
+#completar
+mosaicplot(~Survived+Sex, data = Titanic, shade=TRUE)
+mosaicplot(~Class+Survived+Sex, data = Titanic)
+mosaicplot(~Class+Survived+Sex, data = Titanic, shade=TRUE)
+```
+
